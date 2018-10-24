@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.Arrays;
 
 class BuildingSegment
 {
