@@ -8,13 +8,13 @@ class BuildingSegment
 
 	private int calculateFloor(int l, int w)
 	{
-		System.out.println("The area of each floor for this segment (in blocks) is " + Integer.toString((((l - 2) * (w - 2)) + (((l - 2) * (w - 2)) % 2)) / 2) + ".\n");
+		System.out.println("The number of blocks necessary for each floor in this segment is " + Integer.toString((((l - 2) * (w - 2)) + (((l - 2) * (w - 2)) % 2)) / 2) + ".\n");
 		return ((((l - 2) * (w - 2)) + (((l - 2) * (w - 2)) % 2)) / 2); //One block turns into two slabs.  I *added* the remainder since, for purposes of building something, having too many slabs is better than having too few.
 	}
 
 	private int calculateWalls(int l, int w, int h) //The height of the wall is *between* the floor and one block above the ceiling/next floor. In other words, the height "includes" the ceiling/next floor.
 	{
-		System.out.println("The area of each set of four walls for this segment (in blocks) is " + Integer.toString((l * w - ((l - 2) * (w - 2))) * h) + ".\n");
+		System.out.println("The number of blocks necessary for each 4-wall set in this segment is " + Integer.toString((l * w - ((l - 2) * (w - 2))) * h) + ".\n");
 		return ((l * w - ((l - 2) * (w - 2))) * h);
 	}
 
@@ -22,20 +22,20 @@ class BuildingSegment
 	{
 		if (twoStaircases)
 		{
-			System.out.println("The number of stairs necessary for this segment (in blocks) is " + Long.toString(Math.round(2 * (3 * h - 3.5) * s)) + ". If this segment is the last one, it'll be " + Long.toString(Math.round(2 * ((3 * h - 3.5) * (s - 1)))) + ".\n");
+			System.out.println("The number of blocks necessary for the stairs in this segment is " + Long.toString(Math.round(2 * (3 * h - 3.5) * s)) + ". If this segment is the last one in the building, you need " + Long.toString(Math.round(2 * ((3 * h - 3.5) * (s - 1)))) + " blocks.\n");
 			return ((int) Math.round(2 * (3 * h - 3.5) * s));
 		}
 
 		else
 		{
-			System.out.println("The number of stairs necessary for this segment (in blocks) is " + Long.toString(Math.round((3 * h - 3.5) * s)) + ". If this segment is the last one, it'll be " + Long.toString(Math.round((3 * h - 3.5) * (s - 1))) + ".\n"); 
+			System.out.println("The number of blocks necessary for the stairs in this segment is " + Long.toString(Math.round((3 * h - 3.5) * s)) + ". If this segment is the last one in the building, you need " + Long.toString(Math.round((3 * h - 3.5) * (s - 1))) + " blocks.\n"); 
 			return ((int) Math.round((3 * h - 3.5) * s));
 		}
 	}
 
 	BuildingSegment(int l, int w, int h, int s, boolean twoStairs)
 	{
-		System.out.println("\nCreating segment, now...\n");
+		System.out.println("\nCreating segment...\n");
 
 		if (w > l)
 		{
@@ -56,7 +56,7 @@ class BuildingSegment
 
 		if (s > 1)
 		{
-			System.out.println("Since there are " + s + " storeys, each floor in the segment adds up to " + Integer.toString(floorArea * s) + ", and each set of walls adds up to " + Integer.toString(wallArea * s) + ".\n");
+			System.out.println("Since there are " + s + " storeys, each floor in the segment adds up to " + Integer.toString(floorArea * s) + " blocks, and each set of 4 walls adds up to " + Integer.toString(wallArea * s) + " blocks.\n");
 		}
 
 		twoStaircases = twoStairs;
@@ -174,7 +174,7 @@ class MinecraftBuildingCalculator
 
 		System.out.println("With this roof, the total number of necessary blocks will be " + Integer.toString(total) + ".\n");
 		System.out.println("One door: " + Integer.toString(total - 2) + "\nTwo doors: " + Integer.toString(total - 4) + "\n");
-		System.out.println("30% will probably be windows, so if you want to account for that, the total is around " + Long.toString(Math.round((total - 2) * 0.7)) + " blocks.\n");
+		System.out.println("25% will probably be windows, so if you want to account for that, the total is around " + Long.toString(Math.round((total - 2) * 0.75)) + " blocks.\n");
 		return total;
 	}
 
@@ -184,7 +184,7 @@ class MinecraftBuildingCalculator
 		{
 			if (i > 0 && segs[i - 1].floorArea > segs[i].floorArea) //Build an intermediate roof to avoid an open ceiling when the next segment is thinner.
 			{
-				System.out.println("An intermediate, simple roof of slabs is needed between segments " + Integer.toString(i) + " and " + Integer.toString(i + 1) + ". This will cost " + Integer.toString(segs[i - 1].floorArea - segs[i].floorArea) + " blocks.\n");
+				System.out.println("An intermediate, simple roof of slabs is necessary between segments " + Integer.toString(i) + " and " + Integer.toString(i + 1) + ". This will cost " + Integer.toString(segs[i - 1].floorArea - segs[i].floorArea) + " blocks.\n");
 			}
 		}
 
@@ -200,19 +200,19 @@ class MinecraftBuildingCalculator
 		int lIn = Math.max(6, s.nextInt());
 		System.out.println("\nAnd the width (anything below 6 resolves to 6)?\n");
 		int wIn = Math.max(6, s.nextInt());
-		System.out.println("\nThe height in blocks for EACH FLOOR (anything below 4 resolves to 4)?\n");
+		System.out.println("\nThe height in blocks for EACH FLOOR in the segment (anything below 4 resolves to 4)?\n");
 		int hIn = Math.max(4, s.nextInt());
 		System.out.println("\nAlright.  And for how many storeys do you want the former 3 parameters to persist (anything below 1 resolves to 1)?\n");
 		int sIn = Math.max(1, s.nextInt());
 		System.out.println("\nTwo staircases (pass true or false)?\n");
 		boolean tsIn = s.nextBoolean();
 		b[segInd] = new BuildingSegment(lIn, wIn, hIn, sIn, tsIn);
-		System.out.println("This segment is complete; do you want to make another one (pass true or false)?\n");
+		System.out.println("This segment is complete. Do you want to make another one (pass true or false)?\n");
 		boolean newSeg = s.nextBoolean();
 
 		if (newSeg)
 		{
-			System.out.println("\nCool. Onto the next segment.\n");
+			System.out.println("\nOnto the next segment...\n");
 			b = Arrays.copyOf(b, b.length + 1);
 			passParameters(b, s, ++segInd);
 		}
@@ -220,7 +220,7 @@ class MinecraftBuildingCalculator
 		else
 		{
 			s.close();
-			System.out.println("\nVery well.  Here's a full breakdown of what you'll need...\n");
+			System.out.println("\nVery well.  Here's a breakdown of what you'll need...\n");
 			fullEvaluation(b);
 		}
 	}
