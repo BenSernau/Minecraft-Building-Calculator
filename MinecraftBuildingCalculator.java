@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Arrays;
 
 class BuildingSegment
 {
@@ -172,7 +173,8 @@ class MinecraftBuildingCalculator
 		}
 
 		System.out.println("With this roof, the total number of necessary blocks will be " + Integer.toString(total) + ".\n");
-		System.out.println("One door: " + Integer.toString(total - 2) + "\nTwo doors: " + Integer.toString(total - 4) + ".\n");
+		System.out.println("One door: " + Integer.toString(total - 2) + "\nTwo doors: " + Integer.toString(total - 4) + "\n");
+		System.out.println("30% will probably be windows, so if you want to account for that, the total is around " + Long.toString(Math.round((total - 2) * 0.7)) + " blocks.\n");
 		return total;
 	}
 
