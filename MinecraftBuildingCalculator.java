@@ -86,9 +86,7 @@ class MinecraftBuildingCalculator
 
 	private static int zigguratRoof(int l, int w)
 	{
-		int roofNum;
-
-		roofNum = l * w + (l - 2) * (w - 2);
+		int roofNum = l * w + (l - 2) * (w - 2);
 
 		if (w % 2 != 0) //You're going to need to add slabs to the top of the roof if w is odd.
 		{
