@@ -94,7 +94,7 @@ class MinecraftBuildingCalculator
 			slabs = (((l - 2) - (w - 2)) + 1); //Noticed a pattern.  That's what it is, every time.
 			stairs = roofNum - 2 * slabs; //Start with the total number of block *spaces* for the roof and subtract the slabs.  Not yet ready to multiply by 1.5.  Multiply slabs by two since two stairs would otherwise hold one horizontal position.
 			slabs /= 2; //Since a slab is half of a block, halve the value for slabs.
-			stairs = (int) Math.round(stairs * 1.5); //You multiply by 1.5 *after* you've added the requisite spaces for slabs.
+			stairs = (int) Math.round(stairs * 1.5); //You multiply by 1.5 *after* you've subtracted the requisite spaces for slabs.
 			return (slabs + stairs);
 		}
 
@@ -173,8 +173,8 @@ class MinecraftBuildingCalculator
 		}
 
 		System.out.println("With this roof, the total number of necessary blocks will be " + Integer.toString(total) + ".\n");
-		System.out.println("One door: " + Integer.toString(total - 2) + "\nTwo doors: " + Integer.toString(total - 4) + "\n");
-		System.out.println("25% will probably be windows, so if you want to account for that, the total is around " + Long.toString(Math.round((total - 2) * 0.75)) + " blocks.\n");
+		System.out.println("25% will probably be windows or doors, so if you want to account for that,\nthe total is around " + Long.toString(Math.round(total * 0.75)) + " blocks.\n");
+
 		return total;
 	}
 
@@ -192,6 +192,8 @@ class MinecraftBuildingCalculator
 		{
 			calculateComplexBuilding(segs, i);
 		}
+
+		System.out.println("NB: Since Minecraft houses cannot really be reduced to an algorithm,\nreaching the theoretical number of blocks for a windowless\nhouse will allow you to make different embellishments along the way.\n");
 	}
 
 	private static void passParameters(BuildingSegment[] b, Scanner s, int segInd)
@@ -200,7 +202,7 @@ class MinecraftBuildingCalculator
 		int lIn = Math.max(6, s.nextInt());
 		System.out.println("\nAnd the width (anything below 6 resolves to 6)?\n");
 		int wIn = Math.max(6, s.nextInt());
-		System.out.println("\nThe height in blocks for EACH FLOOR in the segment (anything below 4 resolves to 4)?\n");
+		System.out.println("\nAnd the height in blocks for EACH FLOOR in the segment (anything below 4 resolves to 4)?\n");
 		int hIn = Math.max(4, s.nextInt());
 		System.out.println("\nAlright.  And for how many storeys do you want the former 3 parameters to persist (anything below 1 resolves to 1)?\n");
 		int sIn = Math.max(1, s.nextInt());
