@@ -107,7 +107,7 @@ class MinecraftBuildingCalculator
 
 	private static int slantRoof(int l, int w)
 	{
-		int roofNum = 4 * l * w - 4 * l - 2 * w + 8;
+		int roofNum = 4 * l * w - 4 * l - 5 * w + 8;
 
 		for (int i = w - 1; i > 0; i -= 1)
 		{
