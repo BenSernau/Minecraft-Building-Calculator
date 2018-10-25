@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.Arrays;
+import java.util.ArrayList;
 
 class BuildingSegment
 {
@@ -85,24 +86,28 @@ class MinecraftBuildingCalculator
 
 	private static int zigguratRoof(int l, int w)
 	{
-		int slabs, stairs, roofNum;
+		int roofNum;
 
 		roofNum = l * w + (l - 2) * (w - 2);
 
 		if (w % 2 != 0) //You're going to need to add slabs to the top of the roof if w is odd.
 		{
+			int stairs, slabs;
 			slabs = (((l - 2) - (w - 2)) + 1); //Noticed a pattern.  That's what it is, every time.
 			stairs = roofNum - 2 * slabs; //Start with the total number of block *spaces* for the roof and subtract the slabs.  Not yet ready to multiply by 1.5.  Multiply slabs by two since two stairs would otherwise hold one horizontal position.
 			slabs /= 2; //Since a slab is half of a block, halve the value for slabs.
 			stairs = (int) Math.round(stairs * 1.5); //You multiply by 1.5 *after* you've subtracted the requisite spaces for slabs.
-			return (slabs + stairs);
+			roofNum = slabs + stairs;
 		}
 
 		else
 		{
-			stairs = (int) Math.round(roofNum * 1.5);
-			return stairs;
+			roofNum = (int) Math.round(roofNum * 1.5);
 		}
+
+		return roofNum;
+
+
 	}
 
 	private static int slantRoof(int l, int w)
@@ -147,27 +152,27 @@ class MinecraftBuildingCalculator
 		return (((b.wallArea + b.floorArea) * b.storeys) + b.stairNum);
 	}
 
-	private static int calculateComplexBuilding(BuildingSegment[] segs, int roofChoice) //This is for having many different dimension combinations across one building.
+	private static int calculateWholeBuilding(ArrayList<BuildingSegment> segs, int roofChoice)
 	{
 		int total = 0;
 
-		for (int i = 0; i < segs.length; i++)
+		for (int i = 0; i < segs.size(); i++)
 		{
-			total += calculateBuildingSegment(segs[i]);
+			total += calculateBuildingSegment(segs.get(i));
 
-			if (i > 0 && segs[i - 1].floorArea > segs[i].floorArea) //Build an intermediate roof to avoid an open ceiling when the next segment is thinner.
+			if (i > 0 && segs.get(i - 1).floorArea > segs.get(i).floorArea) //Build an intermediate roof to avoid an open ceiling when the next segment is thinner.
 			{
-				total += segs[i - 1].floorArea - segs[i].floorArea;
+				total += segs.get(i - 1).floorArea - segs.get(i).floorArea;
 			}
 
-			if (i == segs.length - 1)
+			if (i == segs.size() - 1)
 			{
-				total += chooseRoof(segs[i], roofChoice); //Calculate the blocks necessary for the roof,
-				total -= 3 * segs[i].height - 3.5; //but remove the stairs leading to the roof.  We need those like we need haystacks.
+				total += chooseRoof(segs.get(i), roofChoice);
+				total -= 3 * segs.get(i).height - 3.5; //Remove the stairs leading to the roof.  We need those like we need haystacks.
 
-				if (segs[i].twoStaircases)
+				if (segs.get(i).twoStaircases)
 				{
-					total -= 3 * segs[i].height - 3.5; //If twoStaircases is true, then there will be another extra set of stairs.  Delete that, too.
+					total -= 3 * segs.get(i).height - 3.5; //If twoStaircases is true, then there will be another extra set of stairs.  Delete that, too.
 				}
 			}
 		}
@@ -178,25 +183,27 @@ class MinecraftBuildingCalculator
 		return total;
 	}
 
-	private static void fullEvaluation (BuildingSegment[] segs)
+	private static void fullEvaluation (ArrayList<BuildingSegment> building)
 	{
-		for (int i = 0; i < segs.length; i++)
+		int widthOfTop = building.get(building.size() - 1).width, lengthOfTop = building.get(building.size() - 1).length;
+
+		for(int i = 0; i < building.size(); i++)
 		{
-			if (i > 0 && segs[i - 1].floorArea > segs[i].floorArea) //Build an intermediate roof to avoid an open ceiling when the next segment is thinner.
+			if (i > 0 && building.get(i - 1).floorArea > building.get(i).floorArea) //Build an intermediate roof to avoid an open ceiling when the next segment is thinner.
 			{
-				System.out.println("An intermediate, simple roof of slabs is necessary between segments " + Integer.toString(i) + " and " + Integer.toString(i + 1) + ". This will cost " + Integer.toString(segs[i - 1].floorArea - segs[i].floorArea) + " blocks.\n");
+				System.out.println("An intermediate, simple roof of slabs is necessary between segments " + Integer.toString(i) + " and " + Integer.toString(i + 1) + ". This will cost " + Integer.toString(building.get(i - 1).floorArea - building.get(i).floorArea) + " blocks.\n");
 			}
 		}
 
 		for (int i = 1; i < 6; i++)
 		{
-			calculateComplexBuilding(segs, i);
+			calculateWholeBuilding(building, i);
 		}
 
-		System.out.println("NB: Since Minecraft houses cannot really be reduced to an algorithm,\nreaching the theoretical number of blocks for a windowless\nhouse will allow you to make different embellishments along the way.\n");
+		System.out.println("NB: Since Minecraft houses cannot really be reduced to an algorithm, reaching the\ntheoretical number of blocks for a windowless, doorless house will allow you\nto make lots of embellishments along the way.\n");
 	}
 
-	private static void passParameters(BuildingSegment[] b, Scanner s, int segInd)
+	private static void passParameters(ArrayList<BuildingSegment> building, Scanner s)
 	{
 		System.out.println("What's the length of this segment (anything below 6 resolves to 6)?\n");
 		int lIn = Math.max(6, s.nextInt());
@@ -208,30 +215,29 @@ class MinecraftBuildingCalculator
 		int sIn = Math.max(1, s.nextInt());
 		System.out.println("\nTwo staircases (pass true or false)?\n");
 		boolean tsIn = s.nextBoolean();
-		b[segInd] = new BuildingSegment(lIn, wIn, hIn, sIn, tsIn);
+		building.add(new BuildingSegment(lIn, wIn, hIn, sIn, tsIn));
 		System.out.println("This segment is complete. Do you want to make another one (pass true or false)?\n");
 		boolean newSeg = s.nextBoolean();
 
 		if (newSeg)
 		{
 			System.out.println("\nOnto the next segment...\n");
-			b = Arrays.copyOf(b, b.length + 1);
-			passParameters(b, s, ++segInd);
+			passParameters(building, s);
 		}
 
 		else
 		{
 			s.close();
 			System.out.println("\nVery well.  Here's a breakdown of what you'll need...\n");
-			fullEvaluation(b);
+			fullEvaluation(building);
 		}
 	}
 
 	public static void main(String[] args)
 	{
 		System.out.println("\nLet's start with the first segment...\n");
-		BuildingSegment[] theBuilding = {null};
+		ArrayList<BuildingSegment> theBuilding = new ArrayList<BuildingSegment>();
 		Scanner reader = new Scanner(System.in);
-		passParameters(theBuilding, reader, 0);
+		passParameters(theBuilding, reader);
 	}
 }
