@@ -8,7 +8,7 @@ class BuildingSegment
 
 	private int calculateFloor(int l, int w)
 	{
-		System.out.println("The number of blocks necessary for each floor in this segment is " + Integer.toString((((l - 2) * (w - 2)) + (((l - 2) * (w - 2)) % 2)) / 2) + ".\n");
+		System.out.println("The number of blocks necessary for each floor in this segment is " + Integer.toString((((l - 2) * (w - 2)) + (((l - 2) * (w - 2)) % 2)) / 2) + " (floors are made from slabs).\n");
 		return ((((l - 2) * (w - 2)) + (((l - 2) * (w - 2)) % 2)) / 2); //One block turns into two slabs.  I *added* the remainder since, for purposes of building something, having too many slabs is better than having too few.
 	}
 
