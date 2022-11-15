@@ -24,13 +24,13 @@ class BuildingSegment
 		if (twoStaircases)
 		{
 			System.out.println("The number of blocks necessary for the stairs in this segment is " + Long.toString(Math.round(2 * (3 * h - 3.5) * s)) + ". If this segment is the last one in the building, you need " + Long.toString(Math.round(2 * ((3 * h - 3.5) * (s - 1)))) + " blocks.\n");
-			return ((int) Math.round(2 * (3 * h - 3.5) * s));
+			return ((int) Math.round(2 * (3 * h - 2.5) * s));
 		}
 
 		else
 		{
 			System.out.println("The number of blocks necessary for the stairs in this segment is " + Long.toString(Math.round((3 * h - 3.5) * s)) + ". If this segment is the last one in the building, you need " + Long.toString(Math.round((3 * h - 3.5) * (s - 1))) + " blocks.\n"); 
-			return ((int) Math.round((3 * h - 3.5) * s));
+			return ((int) Math.round((3 * h - 2.5) * s));
 		}
 	}
 
@@ -69,7 +69,7 @@ class MinecraftBuildingCalculator
 {
 	private static int standardRoof(int l, int w)	//You can swap l and w depending on the direction you'd like your roof to face.
 	{
-		int roofNum = 3 * l * w - 3 * l - 3 * w + 6;
+		int roofNum = 3 * l * w - 3 * l - 3 * w + 6; //Added six blocks at the end because this subtracts from the corners twice.
 
 		if (w % 2 != 0)
 		{
@@ -203,10 +203,10 @@ class MinecraftBuildingCalculator
 
 	private static void passParameters(ArrayList<BuildingSegment> building, Scanner s)
 	{
-		System.out.println("What's the length of this segment (anything below 6 resolves to 6)?\n");
-		int lIn = Math.max(6, s.nextInt());
-		System.out.println("\nAnd the width (anything below 6 resolves to 6)?\n");
-		int wIn = Math.max(6, s.nextInt());
+		System.out.println("What's the length of this segment (anything below 5 resolves to 5)?\n");
+		int lIn = Math.max(5, s.nextInt());
+		System.out.println("\nAnd the width (anything below 5 resolves to 5)?\n");
+		int wIn = Math.max(5, s.nextInt());
 		System.out.println("\nAnd the height in blocks for EACH FLOOR in the segment (anything below 4 resolves to 4)?\n");
 		int hIn = Math.max(4, s.nextInt());
 		System.out.println("\nAlright.  And for how many storeys do you want the former 3 parameters to persist (anything below 1 resolves to 1)?\n");
