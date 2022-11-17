@@ -23,14 +23,14 @@ class BuildingSegment
 	{
 		if (twoStaircases)
 		{
-			System.out.println("The number of blocks necessary for the stairs in this segment is " + Long.toString(Math.round(2 * (3 * h - 2.5) * s)) + ". If this segment is the last one in the building, you need " + Long.toString(Math.round(2 * ((3 * h - 3.5) * (s - 1)))) + " blocks.\n");
-			return ((int) Math.round(2 * (3 * h - 2.5) * s));
+			System.out.println("The number of blocks necessary for the stairs in this segment is " + Long.toString(Math.round(2 * (3 * h - 3.5) * s)) + ". If this segment is the last one in the building, you need " + Long.toString(Math.round(2 * ((3 * h - 3.5) * (s - 1)))) + " blocks.\n");
+			return ((int) Math.round(2 * (3 * h - 3.5) * s));
 		}
 
 		else
 		{
-			System.out.println("The number of blocks necessary for the stairs in this segment is " + Long.toString(Math.round((3 * h - 2.5) * s)) + ". If this segment is the last one in the building, you need " + Long.toString(Math.round((3 * h - 3.5) * (s - 1))) + " blocks.\n"); 
-			return ((int) Math.round((3 * h - 2.5) * s));
+			System.out.println("The number of blocks necessary for the stairs in this segment is " + Long.toString(Math.round((3 * h - 3.5) * s)) + ". If this segment is the last one in the building, you need " + Long.toString(Math.round((3 * h - 3.5) * (s - 1))) + " blocks.\n"); 
+			return ((int) Math.round((3 * h - 3.5) * s));
 		}
 	}
 
