@@ -203,10 +203,10 @@ class MinecraftBuildingCalculator
 
 	private static void passParameters(ArrayList<BuildingSegment> building, Scanner s)
 	{
-		System.out.println("What's the length of this segment (anything below 5 resolves to 5)?\n");
-		int lIn = Math.max(5, s.nextInt());
-		System.out.println("\nAnd the width (anything below 5 resolves to 5)?\n");
-		int wIn = Math.max(5, s.nextInt());
+		System.out.println("What's the length of this segment (anything below 6 resolves to 6)?\n");
+		int lIn = Math.max(6, s.nextInt());
+		System.out.println("\nAnd the width (anything below 6 resolves to 6)?\n");
+		int wIn = Math.max(6, s.nextInt());
 		System.out.println("\nAnd the height in blocks for EACH FLOOR in the segment (anything below 4 resolves to 4)?\n");
 		int hIn = Math.max(4, s.nextInt());
 		System.out.println("\nAlright.  And for how many storeys do you want the former 3 parameters to persist (anything below 1 resolves to 1)?\n");
