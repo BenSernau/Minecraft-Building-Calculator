@@ -9,8 +9,8 @@ class BuildingSegment
 
 	private int calculateFloor(int l, int w)
 	{
-		System.out.println("The number of blocks necessary for each floor in this segment is " + Integer.toString((((l - 2) * (w - 2)) + (((l - 2) * (w - 2)) % 2)) / 2) + " (floors are made from slabs).\n");
-		return ((((l - 2) * (w - 2)) + (((l - 2) * (w - 2)) % 2)) / 2); //One block turns into two slabs.  I *added* the remainder since, for purposes of building something, having too many slabs is better than having too few.
+		System.out.println("The number of blocks necessary for each floor in this segment is " + Long.toString(Math.round(((l - 2) * (w - 2)) / 2)) + " (floors are made from slabs).\n");
+		return ((int) Math.round(((l - 2) * (w - 2)) / 2)); //One block turns into two slabs.  I *added* the remainder since, for purposes of building something, having too many slabs is better than having too few.
 	}
 
 	private int calculateWalls(int l, int w, int h) //The height of the wall is *between* the floor and one block above the ceiling/next floor. In other words, the height "includes" the ceiling/next floor.
